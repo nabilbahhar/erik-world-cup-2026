@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERIK'S WC26 — Sverige Mission</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ye:#FFCD00;--bl:#006AA7;--dark:#0B1120;--card:#141C2F;--card2:#1A2440;
+  --surface:#0E1628;--border:rgba(255,205,0,0.1);--text:#CBD5E1;--muted:#64748B;
+  --green:#34D399;--red:#F87171;--cyan:#22D3EE;--white:#F1F5F9;
+  --glass:rgba(20,28,47,0.7);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);-webkit-font-smoothing:antialiased}
+::selection{background:var(--ye);color:var(--dark)}
+
+/* ── UTIL ── */
+.container{max-width:1060px;margin:0 auto;padding:0 1.5rem}
+.section{padding:4rem 0}
+.label{font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--ye);font-weight:600;margin-bottom:0.6rem;display:flex;align-items:center;gap:6px}
+.label::before{content:'';width:12px;height:1px;background:var(--ye)}
+.heading{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);color:var(--white);font-weight:700;line-height:1.15;margin-bottom:0.4rem}
+.sub{color:var(--muted);font-size:0.88rem;line-height:1.6;max-width:520px}
+.divider{height:1px;background:linear-gradient(90deg,var(--ye) 0%,transparent 60%);opacity:0.15;margin:3rem 0}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(24px);background:rgba(11,17,32,0.8);border-bottom:1px solid rgba(255,255,255,0.04);transition:0.3s}
+nav .inner{display:flex;align-items:center;justify-content:space-between;padding:0.7rem 1.5rem;max-width:1060px;margin:0 auto}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-wrap img{height:36px;width:auto}
+.logo-text{font-family:'Playfair Display';font-size:0.95rem;font-weight:700;color:var(--white)}
+.logo-text span{color:var(--ye)}
+.nav-pills{display:flex;gap:2px;background:var(--card);border-radius:8px;padding:3px}
+.nav-pill{padding:0.35rem 0.9rem;border:none;background:transparent;color:var(--muted);font-family:'DM Sans';font-size:0.72rem;font-weight:500;letter-spacing:0.5px;cursor:pointer;border-radius:6px;transition:0.25s;white-space:nowrap}
+.nav-pill:hover{color:var(--white)}
+.nav-pill.on{background:var(--ye);color:var(--dark);font-weight:600}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding:6rem 0 4rem}
+.hero-left .label{animation:fadeUp .6s ease both}
+.hero-left .heading{font-size:clamp(2.2rem,5.5vw,3.8rem);animation:fadeUp .6s .1s ease both}
+.hero-left .heading em{font-style:normal;color:var(--ye);font-weight:900}
+.hero-left .sub{animation:fadeUp .6s .2s ease both;margin-top:0.8rem}
+.hero-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;margin-top:2rem;animation:fadeUp .6s .3s ease both}
+.cd-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.8rem;text-align:center}
+.cd-box .n{font-family:'Playfair Display';font-size:1.8rem;font-weight:700;color:var(--ye);line-height:1}
+.cd-box .l{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.hero-right{animation:fadeUp .8s .3s ease both}
+.hero-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,205,0,0.06),transparent 70%);pointer-events:none}
+.group-table{width:100%}
+.group-table th{text-align:left;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:0 0 0.6rem;font-weight:500}
+.group-table td{padding:0.55rem 0;border-top:1px solid rgba(255,255,255,0.04);font-size:0.88rem}
+.group-table tr.swe td{color:var(--ye);font-weight:600}
+.group-table .flag{font-size:1.1rem;margin-right:6px}
+.group-table .date{color:var(--muted);font-size:0.78rem;text-align:right}
+.group-table .city{font-size:0.72rem;color:var(--cyan);text-align:right}
+.badge{display:inline-block;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.62rem;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.badge-miss{background:rgba(248,113,113,0.12);color:var(--red)}
+.badge-go{background:rgba(52,211,153,0.12);color:var(--green)}
+.badge-home{background:rgba(34,211,238,0.12);color:var(--cyan)}
+
+/* ── INTERACTIVE FLOW ── */
+.flow-section{background:var(--surface);border-top:1px solid rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.03)}
+.flow-header{text-align:center;padding-top:4rem;padding-bottom:2rem}
+.flow-header .heading{margin:0 auto}
+.flow-header .sub{margin:0.4rem auto 0;text-align:center}
+
+/* Scenario selector */
+.scenario-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:0.7rem;margin-bottom:2rem}
+.sc-btn{background:var(--card);border:1.5px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.2rem 1rem;cursor:pointer;transition:all 0.3s;text-align:center;position:relative}
+.sc-btn:hover{border-color:rgba(255,205,0,0.2);transform:translateY(-2px)}
+.sc-btn.active{border-color:var(--ye);background:linear-gradient(135deg,var(--card),rgba(255,205,0,0.06))}
+.sc-btn.active::after{content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid var(--ye)}
+.sc-btn .sc-icon{font-size:1.5rem;margin-bottom:0.5rem}
+.sc-btn .sc-name{font-weight:600;font-size:0.85rem;color:var(--white)}
+.sc-btn .sc-price{font-size:0.72rem;color:var(--ye);margin-top:0.2rem;font-weight:500}
+.sc-btn .sc-tag{font-size:0.58rem;color:var(--muted);margin-top:0.3rem;letter-spacing:0.5px}
+.sc-btn.recommended .sc-name::after{content:' ★';color:var(--ye)}
+
+/* Scenario detail panels */
+.sc-panel{display:none;animation:fadeUp 0.4s ease}
+.sc-panel.active{display:block}
+.sc-panel-inner{display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.5rem}
+
+/* Visual timeline */
+.v-timeline{background:var(--card);border-radius:14px;padding:1.5rem;border:1px solid rgba(255,255,255,0.04)}
+.v-timeline h4{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ye);margin-bottom:1rem;font-weight:600}
+.vt-item{display:grid;grid-template-columns:56px 16px 1fr;gap:0;align-items:start;padding:0.5rem 0;position:relative}
+.vt-date{font-size:0.68rem;color:var(--muted);text-align:right;padding-right:8px;padding-top:2px;font-weight:500}
+.vt-line{display:flex;flex-direction:column;align-items:center;position:relative;height:100%}
+.vt-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);border:2px solid var(--card);z-index:2;flex-shrink:0;margin-top:4px}
+.vt-stem{width:1.5px;background:rgba(255,255,255,0.06);flex:1;min-height:20px}
+.vt-item.match .vt-dot{width:10px;height:10px;background:var(--ye);box-shadow:0 0 8px rgba(255,205,0,0.4);border:none}
+.vt-item.seattle .vt-dot{background:var(--cyan);box-shadow:0 0 8px rgba(34,211,238,0.3);border:none}
+.vt-item.flight .vt-dot{background:var(--white);width:6px;height:6px}
+.vt-content{padding-left:8px;padding-bottom:0.6rem}
+.vt-title{font-size:0.82rem;font-weight:600;color:var(--white);line-height:1.3}
+.vt-sub{font-size:0.72rem;color:var(--muted);margin-top:1px;line-height:1.4}
+.vt-item:last-child .vt-stem{display:none}
+
+/* Info sidebar */
+.info-side{display:flex;flex-direction:column;gap:0.8rem}
+.info-card{background:var(--card);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.04)}
+.info-card h5{font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ye);margin-bottom:0.6rem;font-weight:600}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+.info-card .val{font-family:'Playfair Display';font-size:1.5rem;font-weight:700;color:var(--white)}
+.info-card .val span{color:var(--ye);font-size:0.85rem;font-weight:400;font-family:'DM Sans'}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.info-row:last-child{border:none}
+.info-row .k{font-size:0.75rem;color:var(--muted)}
+.info-row .v{font-size:0.78rem;color:var(--white);font-weight:500}
+.stars{display:flex;gap:2px}
+.star{width:10px;height:10px;border-radius:2px}
+.star.on{background:var(--ye)}
+.star.off{background:rgba(255,255,255,0.06)}
+
+/* ── KNOCKOUT BRACKET ── */
+.bracket-visual{display:flex;flex-direction:column;gap:0.5rem}
+.bracket-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem}
+.b-node{background:var(--card);border:1.5px solid rgba(255,255,255,0.06);border-radius:10px;padding:1rem;text-align:center;transition:0.3s;cursor:pointer;position:relative}
+.b-node:hover{border-color:rgba(255,205,0,0.3);transform:translateY(-2px)}
+.b-node h5{font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:2px}
+.b-node p{font-size:0.68rem;color:var(--muted)}
+.b-node .venue{font-size:0.72rem;color:var(--cyan);font-weight:500;margin-top:4px}
+.b-node.gold{border-color:rgba(255,205,0,0.25);background:linear-gradient(160deg,var(--card),rgba(255,205,0,0.04))}
+.b-node.blue{border-color:rgba(0,106,167,0.3);background:linear-gradient(160deg,var(--card),rgba(0,106,167,0.05))}
+.b-node.dim{opacity:0.35;pointer-events:none}
+.b-node .b-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;padding:0.15rem 0.6rem;border-radius:4px;font-weight:600;white-space:nowrap}
+.b-badge.r32{background:var(--ye);color:var(--dark)}
+.b-badge.r16{background:var(--cyan);color:var(--dark)}
+.connector-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;text-align:center}
+.connector-row span{color:rgba(255,255,255,0.1);font-size:1.2rem}
+
+/* ── BUDGET ── */
+.budget-compare{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.b-col{background:var(--card);border-radius:14px;padding:1.5rem;border:1px solid rgba(255,255,255,0.04);transition:0.3s}
+.b-col:hover{border-color:var(--border);transform:translateY(-3px)}
+.b-col.featured{border-color:rgba(255,205,0,0.2);background:linear-gradient(170deg,var(--card),rgba(255,205,0,0.03))}
+.b-col-tag{font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:0.5rem}
+.b-col-tag.eco{color:var(--green)}
+.b-col-tag.mid{color:var(--ye)}
+.b-col-tag.lux{color:var(--red)}
+.b-col .total{font-family:'Playfair Display';font-size:2rem;font-weight:700;color:var(--white);margin-bottom:1rem}
+.b-col .total small{font-size:0.8rem;font-family:'DM Sans';color:var(--muted);font-weight:400}
+.b-line{display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.75rem}
+.b-line .bl-k{color:var(--muted)}
+.b-line .bl-v{color:var(--white);font-weight:500}
+.b-line:last-child{border:none}
+
+/* ── SEATTLE ── */
+.seattle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem}
+.sea-card{background:var(--card);border-radius:12px;padding:1.1rem;border:1px solid rgba(255,255,255,0.04);transition:0.3s;cursor:default}
+.sea-card:hover{border-color:rgba(34,211,238,0.2);transform:translateY(-2px)}
+.sea-card.pick{border-color:rgba(52,211,153,0.25);background:linear-gradient(160deg,var(--card),rgba(52,211,153,0.03))}
+.sea-card.ko{border-color:rgba(255,205,0,0.15);background:linear-gradient(160deg,var(--card),rgba(255,205,0,0.02))}
+.sea-date{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-weight:500;margin-bottom:0.4rem}
+.sea-card h5{font-size:0.85rem;font-weight:600;color:var(--white);margin-bottom:0.2rem}
+.sea-card p{font-size:0.7rem;color:var(--muted);line-height:1.4}
+
+/* ── CHECKLIST ── */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem}
+.chk{display:flex;align-items:flex-start;gap:0.7rem;padding:1rem;background:var(--card);border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:0.3s;user-select:none}
+.chk:hover{border-color:var(--border)}
+.chk.done{opacity:0.35}
+.chk.done .chk-box{background:var(--green);border-color:var(--green)}
+.chk.done .chk-box::after{content:'\2713';color:#fff;font-size:0.6rem;line-height:1}
+.chk-box{width:18px;height:18px;min-width:18px;border:2px solid rgba(255,255,255,0.15);border-radius:5px;display:flex;align-items:center;justify-content:center;transition:0.2s;margin-top:1px}
+.chk-txt h6{font-size:0.8rem;font-weight:600;color:var(--white);line-height:1.3}
+.chk-txt p{font-size:0.68rem;color:var(--muted);line-height:1.4;margin-top:2px}
+.chk .when{font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:0.15rem 0.45rem;border-radius:3px;margin-left:auto;white-space:nowrap;align-self:start}
+.when.now{background:rgba(248,113,113,0.12);color:var(--red)}
+.when.wait{background:rgba(255,255,255,0.05);color:var(--muted)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:3rem 1.5rem;opacity:0.3;font-size:0.7rem;letter-spacing:1px}
+
+/* ── ANIMS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.65s cubic-bezier(0.22,1,0.36,1)}
+.reveal.vis{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr;gap:2rem}
+  .hero-right{order:-1}
+  .sc-panel-inner{grid-template-columns:1fr}
+  .scenario-selector{grid-template-columns:repeat(2,1fr)}
+  .bracket-row{grid-template-columns:1fr}
+  .budget-compare{grid-template-columns:1fr}
+  .seattle-grid{grid-template-columns:1fr 1fr}
+  .check-grid{grid-template-columns:1fr}
+  .nav-pills{display:none}
+}
+@media(max-width:520px){
+  .seattle-grid{grid-template-columns:1fr}
+  .hero-countdown{grid-template-columns:repeat(4,1fr);gap:0.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+<div class="inner">
+<div class="logo-wrap">
+<img src="https://i.postimg.cc/fy4mrz2j/j8pshqcyysrmr0cxh118qmvctw-preview-0-ezremove.png" alt="WC26 Logo">
+<div class="logo-text">ERIK'S <span>WC26</span></div>
+</div>
+<div class="nav-pills">
+<button class="nav-pill on" onclick="scrollTo('hero')">Home</button>
+<button class="nav-pill" onclick="scrollTo('scenarios')">Scenarios</button>
+<button class="nav-pill" onclick="scrollTo('bracket')">Bracket</button>
+<button class="nav-pill" onclick="scrollTo('budget')">Budget</button>
+<button class="nav-pill" onclick="scrollTo('action')">Action</button>
+</div>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+<div class="container">
+<div class="hero-grid">
+<div class="hero-left">
+<div class="label">FIFA World Cup 2026 — Seattle base</div>
+<h1 class="heading">Follow <em>Sverige</em><br>across America</h1>
+<p class="sub">Le plan complet pour suivre la Suède au Mondial. Houston, Dallas, et au-delà. Chaque scénario, chaque budget, chaque décision — schématisé et interactif.</p>
+<div class="hero-countdown">
+<div class="cd-box"><div class="n" id="cd-d">--</div><div class="l">Days</div></div>
+<div class="cd-box"><div class="n" id="cd-h">--</div><div class="l">Hours</div></div>
+<div class="cd-box"><div class="n" id="cd-m">--</div><div class="l">Min</div></div>
+<div class="cd-box"><div class="n" id="cd-s">--</div><div class="l">Sec</div></div>
+</div>
+<p style="font-size:0.68rem;color:var(--muted);margin-top:0.5rem">Countdown to 🇳🇱 Netherlands vs Sweden 🇸🇪 — Houston — June 20</p>
+</div>
+
+<div class="hero-right">
+<div class="hero-card">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+<span style="font-family:'Playfair Display';font-weight:700;color:var(--white);font-size:1.1rem">Group F</span>
+<span style="font-size:0.6rem;letter-spacing:2px;color:var(--ye);text-transform:uppercase;font-weight:600">June 14 — 25</span>
+</div>
+<table class="group-table">
+<tr><th>Match</th><th></th><th style="text-align:right">Date</th><th style="text-align:right">City</th></tr>
+<tr class="swe"><td><span class="flag">🇸🇪</span> Sweden vs <span class="flag">🇹🇳</span> Tunisia</td><td><span class="badge badge-miss">missed</span></td><td class="date">Jun 14</td><td class="city">Monterrey 🇲🇽</td></tr>
+<tr class="swe"><td><span class="flag">🇳🇱</span> Netherlands vs <span class="flag">🇸🇪</span> Sweden</td><td><span class="badge badge-go">go</span></td><td class="date">Jun 20</td><td class="city">Houston</td></tr>
+<tr class="swe"><td><span class="flag">🇯🇵</span> Japan vs <span class="flag">🇸🇪</span> Sweden</td><td><span class="badge badge-go">go</span></td><td class="date">Jun 25</td><td class="city">Dallas</td></tr>
+<tr><td colspan="4" style="padding-top:0.8rem;border-top:1px solid rgba(255,255,255,0.06)"></td></tr>
+<tr><td><span class="flag">🇺🇸</span> USA vs <span class="flag">🇦🇺</span> Australia</td><td><span class="badge badge-home">seattle</span></td><td class="date">Jun 19</td><td class="city">Lumen Field</td></tr>
+</table>
+<p style="font-size:0.68rem;color:var(--muted);margin-top:1rem;line-height:1.5">Erik arrives <strong style="color:var(--white)">June 16</strong>. Misses Match 1. Can attend Matches 2 & 3 + Seattle WC atmosphere.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SCENARIOS — INTERACTIVE -->
+<section class="flow-section" id="scenarios">
+<div class="container">
+<div class="flow-header">
+<div class="label" style="justify-content:center">Choose a scenario</div>
+<h2 class="heading">How should Erik do this?</h2>
+<p class="sub" style="max-width:500px">4 scénarios optimisés. Clique sur celui qui t'intéresse pour voir l'itinéraire complet, le budget, et le niveau de confort.</p>
+</div>
+
+<!-- Scenario buttons -->
+<div class="scenario-selector">
+<div class="sc-btn active" onclick="pickSc(0)">
+<div class="sc-icon">🎒</div>
+<div class="sc-name">Solo</div>
+<div class="sc-price">~$3,375</div>
+<div class="sc-tag">Maximum football</div>
+</div>
+<div class="sc-btn" onclick="pickSc(1)">
+<div class="sc-icon">💑</div>
+<div class="sc-name">Couple</div>
+<div class="sc-price">~$5,360</div>
+<div class="sc-tag">Texas road trip</div>
+</div>
+<div class="sc-btn" onclick="pickSc(2)">
+<div class="sc-icon">👨‍👩‍👧‍👦</div>
+<div class="sc-name">Family</div>
+<div class="sc-price">~$5,360</div>
+<div class="sc-tag">Split strategy</div>
+</div>
+<div class="sc-btn recommended" onclick="pickSc(3)">
+<div class="sc-icon">⚡</div>
+<div class="sc-name">Hybrid</div>
+<div class="sc-price">~$4,870</div>
+<div class="sc-tag">Best compromise</div>
+</div>
+</div>
+
+<!-- Panel 0: SOLO -->
+<div class="sc-panel active" id="sp0">
+<div class="sc-panel-inner">
+<div class="v-timeline">
+<h4>Itinerary — the texas swing</h4>
+<div class="vt-item seattle">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇺🇸 USA vs Australia — Lumen Field</div><div class="vt-sub">Noon PT. WC atmosphere in Seattle!</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Evening flight SEA → Houston</div><div class="vt-sub">Arrive ~midnight CT</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 20</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇳🇱 Netherlands vs Sweden 🇸🇪</div><div class="vt-sub">NRG Stadium, Houston — Noon CT</div></div>
+</div>
+<div class="vt-item">
+<div class="vt-date">Jun 21-23</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🚗 Houston → Dallas drive</div><div class="vt-sub">3.5h on I-45. Explore Texas, BBQ, rest.</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 25</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇯🇵 Japan vs Sweden 🇸🇪</div><div class="vt-sub">AT&T Stadium, Dallas — 6 PM CT</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 26</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Fly DFW → Seattle</div><div class="vt-sub">Back to base. Await group results.</div></div>
+</div>
+</div>
+<div class="info-side">
+<div class="info-card"><h5>Budget (realistic)</h5><div class="val">$3,375 <span>USD</span></div></div>
+<div class="info-card"><h5>Key metrics</h5>
+<div class="info-row"><span class="k">Nights away</span><span class="v">7</span></div>
+<div class="info-row"><span class="k">Sweden matches</span><span class="v">2 / 3</span></div>
+<div class="info-row"><span class="k">Seattle WC matches</span><span class="v">1+</span></div>
+<div class="info-row"><span class="k">Flights</span><span class="v">2 one-ways</span></div>
+<div class="info-row"><span class="k">Fatigue level</span><div class="stars"><div class="star on"></div><div class="star on"></div><div class="star off"></div><div class="star off"></div><div class="star off"></div></div></div>
+<div class="info-row"><span class="k">Kid-friendly</span><span class="v">N/A</span></div>
+</div>
+<div class="info-card"><h5>Why this works</h5><p>Maximum football, minimum cost. One open-jaw flight, one Texas drive. Comfortable pace, flexible for knockout rounds.</p></div>
+</div>
+</div>
+</div>
+
+<!-- Panel 1: COUPLE -->
+<div class="sc-panel" id="sp1">
+<div class="sc-panel-inner">
+<div class="v-timeline">
+<h4>Itinerary — couples texas trip</h4>
+<div class="vt-item seattle">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇺🇸 Both attend USA vs Australia</div><div class="vt-sub">Date day + World Cup atmosphere</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Both fly SEA → Houston</div><div class="vt-sub">Red-eye arrival together</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 20</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇳🇱 vs 🇸🇪 — Houston together</div><div class="vt-sub">NRG Stadium — Noon CT</div></div>
+</div>
+<div class="vt-item">
+<div class="vt-date">Jun 21-22</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🏙️ Explore Houston</div><div class="vt-sub">Space Center, Museum District, food scene</div></div>
+</div>
+<div class="vt-item">
+<div class="vt-date">Jun 23</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🚗 Road trip Houston → Dallas</div><div class="vt-sub">3.5h drive, stop at Buc-ee's</div></div>
+</div>
+<div class="vt-item">
+<div class="vt-date">Jun 24</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🏙️ Explore Dallas / Fort Worth</div><div class="vt-sub">Stockyards, BBQ, arts district</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 25</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇯🇵 vs 🇸🇪 — Dallas together</div><div class="vt-sub">AT&T Stadium — Evening game ⭐</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 26</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Both fly DFW → Seattle</div><div class="vt-sub">Back to base</div></div>
+</div>
+</div>
+<div class="info-side">
+<div class="info-card"><h5>Budget (realistic)</h5><div class="val">$5,360 <span>USD</span></div></div>
+<div class="info-card"><h5>Key metrics</h5>
+<div class="info-row"><span class="k">Nights away</span><span class="v">7</span></div>
+<div class="info-row"><span class="k">Sweden matches</span><span class="v">2 / 3</span></div>
+<div class="info-row"><span class="k">Romance factor</span><div class="stars"><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div></div></div>
+<div class="info-row"><span class="k">Flights</span><span class="v">2 per person</span></div>
+<div class="info-row"><span class="k">Fatigue</span><div class="stars"><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star off"></div><div class="star off"></div></div></div>
+</div>
+<div class="info-card"><h5>Why this works</h5><p>Once-in-a-lifetime couple trip. Two WC matches, Texas road trip, Houston + Dallas exploration. Peak memory ROI. The most emotionally valuable scenario.</p></div>
+</div>
+</div>
+</div>
+
+<!-- Panel 2: FAMILY -->
+<div class="sc-panel" id="sp2">
+<div class="sc-panel-inner">
+<div class="v-timeline">
+<h4>Itinerary — split strategy</h4>
+<div class="vt-item seattle">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">👨‍👩‍👧‍👦 ALL attend USA vs Australia</div><div class="vt-sub">Perfect family WC experience at Lumen Field</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Erik flies solo → Houston</div><div class="vt-sub">Family stays in Seattle comfort zone</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 20</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇳🇱 vs 🇸🇪 — Erik solo in Houston</div><div class="vt-sub">Family: Seattle exploration day</div></div>
+</div>
+<div class="vt-item seattle">
+<div class="vt-date">Jun 24</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">👩‍👧‍👦 Family: Seattle WC match</div><div class="vt-sub">Qatar vs TBD — More WC magic for kids</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 25</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇯🇵 vs 🇸🇪 — Erik solo in Dallas</div><div class="vt-sub">Full Sverige support mode</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 26</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Erik returns → Family reunion</div><div class="vt-sub">Everyone back together in Seattle</div></div>
+</div>
+</div>
+<div class="info-side">
+<div class="info-card"><h5>Budget (realistic)</h5><div class="val">$5,360 <span>USD</span></div></div>
+<div class="info-card"><h5>Key metrics</h5>
+<div class="info-row"><span class="k">Erik nights away</span><span class="v">7</span></div>
+<div class="info-row"><span class="k">Sweden matches</span><span class="v">2 / 3</span></div>
+<div class="info-row"><span class="k">Family WC matches</span><span class="v">2–3 in Seattle</span></div>
+<div class="info-row"><span class="k">Kid-friendly</span><div class="stars"><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div></div></div>
+<div class="info-row"><span class="k">Fatigue (kids)</span><div class="stars"><div class="star on"></div><div class="star off"></div><div class="star off"></div><div class="star off"></div><div class="star off"></div></div></div>
+</div>
+<div class="info-card"><h5>Why this works</h5><p>Kids get genuine WC memories in Seattle. No exhausting travel. Erik gets both Sweden matches solo. Smart, comfortable, pragmatic.</p></div>
+</div>
+</div>
+</div>
+
+<!-- Panel 3: HYBRID -->
+<div class="sc-panel" id="sp3">
+<div class="sc-panel-inner">
+<div class="v-timeline">
+<h4>★ Itinerary — the best of everything</h4>
+<div class="vt-item seattle">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">👨‍👩‍👧‍👦 ALL attend USA vs Australia</div><div class="vt-sub">Family day at Lumen Field</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 19</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Erik flies solo SEA → Houston</div><div class="vt-sub">Wife + kids stay in Seattle</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 20</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇳🇱 vs 🇸🇪 — Erik solo at NRG</div><div class="vt-sub">Noon kickoff. Functional. Better done solo.</div></div>
+</div>
+<div class="vt-item">
+<div class="vt-date">Jun 21-23</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🚗 Erik drives Houston → Dallas</div><div class="vt-sub">Chill Texas road time</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 24</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Wife flies SEA → Dallas</div><div class="vt-sub">Kids stay with trusted person in Seattle</div></div>
+</div>
+<div class="vt-item match">
+<div class="vt-date">Jun 25</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">🇯🇵 vs 🇸🇪 — Erik + Wife ⭐</div><div class="vt-sub">AT&T Stadium — Best match, best venue, together</div></div>
+</div>
+<div class="vt-item flight">
+<div class="vt-date">Jun 26</div>
+<div class="vt-line"><div class="vt-dot"></div><div class="vt-stem"></div></div>
+<div class="vt-content"><div class="vt-title">✈️ Both fly DFW → Seattle</div><div class="vt-sub">Family reunion. Await group results.</div></div>
+</div>
+</div>
+<div class="info-side">
+<div class="info-card" style="border-color:rgba(255,205,0,0.15);background:linear-gradient(160deg,var(--card),rgba(255,205,0,0.03))"><h5>★ Recommended budget</h5><div class="val">$4,870 <span>USD</span></div><p style="margin-top:0.3rem">Best value per World Cup moment</p></div>
+<div class="info-card"><h5>Key metrics</h5>
+<div class="info-row"><span class="k">Sweden matches</span><span class="v">2 / 3</span></div>
+<div class="info-row"><span class="k">Couple match</span><span class="v">Dallas (best)</span></div>
+<div class="info-row"><span class="k">Family WC</span><span class="v">Seattle matches</span></div>
+<div class="info-row"><span class="k">Kid-friendly</span><div class="stars"><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star off"></div></div></div>
+<div class="info-row"><span class="k">Budget efficiency</span><div class="stars"><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div><div class="star on"></div></div></div>
+</div>
+<div class="info-card"><h5>Why this is THE pick</h5><p>Erik gets both matches. Wife joins for the best one (Dallas evening, AT&T Stadium, group decider). Kids safe in Seattle with WC atmosphere. Budget stays sane. Everyone wins.</p></div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- KNOCKOUT BRACKET -->
+<section class="section" id="bracket">
+<div class="container reveal">
+<div class="label">Knockout paths</div>
+<h2 class="heading">If Sweden qualifies...</h2>
+<p class="sub">Results known June 27. Nothing to book before that. Here's every path.</p>
+<div style="height:1.5rem"></div>
+<div class="bracket-visual">
+<div style="text-align:center;margin-bottom:0.5rem"><span class="badge" style="background:rgba(255,205,0,0.12);color:var(--ye);font-size:0.7rem;padding:0.3rem 1rem">GROUP F FINISH — JUNE 27</span></div>
+<div class="bracket-row">
+<div class="b-node gold" onclick="togglePath(this,'first')"><h5>🥇 1st place</h5><p>Best case scenario</p></div>
+<div class="b-node blue" onclick="togglePath(this,'second')"><h5>🥈 2nd place</h5><p>Most likely outcome</p></div>
+<div class="b-node" onclick="togglePath(this,'third')"><h5>3rd or eliminated</h5><p>Variable / over</p></div>
+</div>
+<div class="connector-row"><span>↓</span><span>↓</span><span>↓</span></div>
+<div class="bracket-row" id="r32row">
+<div class="b-node gold"><div class="b-badge r32">R32</div><h5>Monterrey 🇲🇽</h5><p>June 29 — 9 PM ET</p><div class="venue">vs Group C runner-up</div></div>
+<div class="b-node blue"><div class="b-badge r32">R32</div><h5>Houston 🇺🇸</h5><p>June 29 — 1 PM ET</p><div class="venue">vs Group C winner</div></div>
+<div class="b-node"><div class="b-badge r32">R32</div><h5>Unknown venue</h5><p>Depends on bracket</p><div class="venue">Could be Seattle! 🤞</div></div>
+</div>
+<div class="connector-row"><span>↓ win</span><span>↓ win</span><span>↓</span></div>
+<div class="bracket-row" id="r16row">
+<div class="b-node gold"><div class="b-badge r16">R16</div><h5>Houston</h5><p>July 4 — 1 PM ET</p><div class="venue">Independence Day ⚡</div></div>
+<div class="b-node blue"><div class="b-badge r16">R16</div><h5>New York / NJ</h5><p>July 5 — 4 PM ET</p><div class="venue">MetLife Stadium</div></div>
+<div class="b-node dim"><div class="b-badge r16">R16</div><h5>TBD</h5><p>Fully depends on results</p><div class="venue">React in real-time</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- BUDGET -->
+<section class="section" id="budget" style="background:var(--surface);border-top:1px solid rgba(255,255,255,0.03)">
+<div class="container reveal">
+<div class="label">Budget breakdown</div>
+<h2 class="heading">What it actually costs</h2>
+<p class="sub">Hybrid scenario (recommended). Group stage only. Seattle housing + car not included.</p>
+<div style="height:1.5rem"></div>
+<div class="budget-compare">
+<div class="b-col">
+<div class="b-col-tag eco">Economy</div>
+<div class="total">$2,880 <small>USD</small></div>
+<div class="b-line"><span class="bl-k">Tickets (3 matches)</span><span class="bl-v">$750</span></div>
+<div class="b-line"><span class="bl-k">Flights (3 one-ways)</span><span class="bl-v">$540</span></div>
+<div class="b-line"><span class="bl-k">Car rental 5d</span><span class="bl-v">$200</span></div>
+<div class="b-line"><span class="bl-k">Hotels 6 nights</span><span class="bl-v">$600</span></div>
+<div class="b-line"><span class="bl-k">Meals + transport</span><span class="bl-v">$530</span></div>
+<div class="b-line"><span class="bl-k">Contingency</span><span class="bl-v">$260</span></div>
+</div>
+<div class="b-col featured">
+<div class="b-col-tag mid">★ Realistic</div>
+<div class="total">$4,870 <small>USD</small></div>
+<div class="b-line"><span class="bl-k">Tickets (3 matches)</span><span class="bl-v">$1,250</span></div>
+<div class="b-line"><span class="bl-k">Flights (3 one-ways)</span><span class="bl-v">$820</span></div>
+<div class="b-line"><span class="bl-k">Car rental 5d</span><span class="bl-v">$300</span></div>
+<div class="b-line"><span class="bl-k">Hotels 6 nights</span><span class="bl-v">$1,000</span></div>
+<div class="b-line"><span class="bl-k">Meals + transport</span><span class="bl-v">$1,060</span></div>
+<div class="b-line"><span class="bl-k">Contingency</span><span class="bl-v">$440</span></div>
+</div>
+<div class="b-col">
+<div class="b-col-tag lux">Comfort</div>
+<div class="total">$8,260 <small>USD</small></div>
+<div class="b-line"><span class="bl-k">Tickets (3 matches)</span><span class="bl-v">$2,150</span></div>
+<div class="b-line"><span class="bl-k">Flights (3 one-ways)</span><span class="bl-v">$1,310</span></div>
+<div class="b-line"><span class="bl-k">Car rental 5d</span><span class="bl-v">$450</span></div>
+<div class="b-line"><span class="bl-k">Hotels 6 nights</span><span class="bl-v">$1,800</span></div>
+<div class="b-line"><span class="bl-k">Meals + transport</span><span class="bl-v">$1,800</span></div>
+<div class="b-line"><span class="bl-k">Contingency</span><span class="bl-v">$750</span></div>
+</div>
+</div>
+<p style="font-size:0.7rem;color:var(--muted);margin-top:1.2rem;text-align:center">Add $1,300–2,100 if Sweden qualifies for knockout rounds (R32 + R16 travel)</p>
+</div>
+</section>
+
+<!-- SEATTLE -->
+<section class="section" id="seattle-sec">
+<div class="container reveal">
+<div class="label">Home base</div>
+<h2 class="heading">World Cup in Seattle</h2>
+<p class="sub">6 matches at Lumen Field. La famille profite sans voyager.</p>
+<div style="height:1.5rem"></div>
+<div class="seattle-grid">
+<div class="sea-card"><div class="sea-date">Jun 15 · 12 PM</div><h5>🇧🇪 Belgium vs Egypt 🇪🇬</h5><p>Group G — Opening match at Lumen</p></div>
+<div class="sea-card pick"><div class="sea-date">Jun 19 · 12 PM</div><h5>🇺🇸 USA vs Australia 🇦🇺</h5><p>★ MUST ATTEND — Perfect family match</p></div>
+<div class="sea-card"><div class="sea-date">Jun 24 · 12 PM</div><h5>Qatar vs UEFA Playoff A</h5><p>Could be Italy, Wales, Bosnia or N.Ireland</p></div>
+<div class="sea-card"><div class="sea-date">Jun 26 · 8 PM</div><h5>🇪🇬 Egypt vs Iran 🇮🇷</h5><p>Night game — Electric atmosphere</p></div>
+<div class="sea-card ko"><div class="sea-date">Jul 1 · 1 PM</div><h5>Round of 32</h5><p>Knockout drama at Lumen Field</p></div>
+<div class="sea-card ko"><div class="sea-date">Jul 6 · 5 PM</div><h5>Round of 16 ⭐</h5><p>Biggest Seattle match. Family must attend.</p></div>
+</div>
+</div>
+</section>
+
+<!-- ACTION -->
+<section class="section" id="action" style="background:var(--surface);border-top:1px solid rgba(255,255,255,0.03)">
+<div class="container reveal">
+<div class="label">Action items</div>
+<h2 class="heading">Book now vs. wait</h2>
+<p class="sub">Les prix grimpent chaque semaine. Verrouille le certain, garde le liquide pour l'incertain.</p>
+<div style="height:1.5rem"></div>
+<div class="check-grid">
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Flight SEA → Houston (Jun 19 eve)</h6><p>~$150–350 one-way. Flexible fare.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Flight DFW → Seattle (Jun 26)</h6><p>~$130–320 one-way. Open-jaw.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Match tickets: Houston + Dallas</h6><p>FIFA Resale open. ~$200–600 / ticket.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Hotels: Houston 4n + Dallas 2n</h6><p>Refundable only. WC demand extreme.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Seattle: USA vs Australia tickets</h6><p>Family priority #1. Noon kickoff.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Car rental Texas (5 days)</h6><p>Low rates, fully refundable.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Wife flight SEA → DFW (Jun 24)</h6><p>Hybrid scenario only.</p></div><span class="when now">Now</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Knockout flights & hotels</h6><p>DO NOT BOOK. Wait until June 27.</p></div><span class="when wait">Wait</span></div>
+<div class="chk" onclick="this.classList.toggle('done')"><div class="chk-box"></div><div class="chk-txt"><h6>Keep $1,500–2,000 reserve</h6><p>For knockout rounds if Sweden qualifies.</p></div><span class="when wait">Standby</span></div>
+</div>
+</div>
+</section>
+
+<footer>
+<p>ERIK'S WC26 MISSION — April 2026 — Schedule verified FIFA.com · ESPN · FOX Sports</p>
+<p style="margin-top:0.5rem;color:var(--ye);opacity:0.6">🇸🇪 HEJA SVERIGE 🇸🇪</p>
+</footer>
+
+<script>
+// Countdown
+const T=new Date('2026-06-20T17:00:00Z').getTime();
+function tick(){const n=Date.now(),d=T-n;if(d<=0)return;const D=Math.floor(d/864e5),H=Math.floor(d%864e5/36e5),M=Math.floor(d%36e5/6e4),S=Math.floor(d%6e4/1e3);document.getElementById('cd-d').textContent=D;document.getElementById('cd-h').textContent=H;document.getElementById('cd-m').textContent=String(M).padStart(2,'0');document.getElementById('cd-s').textContent=String(S).padStart(2,'0');}
+tick();setInterval(tick,1000);
+
+// Scenarios
+function pickSc(i){
+document.querySelectorAll('.sc-btn').forEach((b,j)=>b.classList.toggle('active',j===i));
+document.querySelectorAll('.sc-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+}
+
+// Scroll nav
+function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+const secs=['hero','scenarios','bracket','budget','action'];
+window.addEventListener('scroll',()=>{
+const y=window.scrollY+120;
+const pills=document.querySelectorAll('.nav-pill');
+secs.forEach((s,i)=>{const el=document.getElementById(s);if(el&&y>=el.offsetTop&&y<el.offsetTop+el.offsetHeight){pills.forEach(p=>p.classList.remove('on'));pills[i]?.classList.add('on');}});
+});
+
+// Reveal
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
